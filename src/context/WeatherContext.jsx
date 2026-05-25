@@ -1,16 +1,67 @@
-import { useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { fetchWeather, searchCity, interpretWeatherCode } from '../api/weatherApi'
 
-const DEFAULT_CITY = { name: 'Manila', lat: 14.5995, lon: 120.9842 }
+const WeatherContext = createContext(null)
 
-export function useWeather() {
-  const [location, setLocation] = useState(DEFAULT_CITY)
+const FALLBACK_CITY = { name: 'Manila', lat: 14.5995, lon: 120.9842 }
+
+async function reverseGeocode(lat, lon) {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+    { headers: { 'Accept-Language': 'en' } }
+  )
+  const data = await res.json()
+  // Try city → town → village → county as fallback
+  const name =
+    data.address?.city ||
+    data.address?.town ||
+    data.address?.village ||
+    data.address?.county ||
+    'Your Location'
+  return { name, lat, lon }
+}
+
+export function WeatherProvider({ children }) {
+  const [location, setLocation] = useState(null)      // null = still detecting
   const [weather, setWeather]   = useState(null)
   const [loading, setLoading]   = useState(true)
   const [error, setError]       = useState(null)
+  const [locating, setLocating] = useState(true)      // true while getting GPS
 
+  // Step 1 — get device location on mount
   useEffect(() => {
+    if (!navigator.geolocation) {
+      setLocation(FALLBACK_CITY)
+      setLocating(false)
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const { latitude: lat, longitude: lon } = pos.coords
+          const loc = await reverseGeocode(lat, lon)
+          setLocation(loc)
+        } catch {
+          setLocation(FALLBACK_CITY)
+        } finally {
+          setLocating(false)
+        }
+      },
+      () => {
+        // User denied or error — fall back to Manila
+        setLocation(FALLBACK_CITY)
+        setLocating(false)
+      },
+      { timeout: 8000 }
+    )
+  }, [])
+
+  // Step 2 — fetch weather whenever location changes
+  useEffect(() => {
+    if (!location) return
     let cancelled = false
+
     async function load() {
       setLoading(true)
       setError(null)
@@ -23,6 +74,7 @@ export function useWeather() {
         if (!cancelled) setLoading(false)
       }
     }
+
     load()
     return () => { cancelled = true }
   }, [location])
@@ -39,7 +91,17 @@ export function useWeather() {
     }
   }
 
-  return { weather, loading, error, location, changeCity }
+  return (
+    <WeatherContext.Provider value={{ weather, loading, error, location, locating, changeCity }}>
+      {children}
+    </WeatherContext.Provider>
+  )
+}
+
+export function useWeather() {
+  const ctx = useContext(WeatherContext)
+  if (!ctx) throw new Error('useWeather must be used inside WeatherProvider')
+  return ctx
 }
 
 function parse(data, cityName) {
@@ -65,7 +127,7 @@ function parse(data, cityName) {
     hourly: data.hourly.time.slice(0, 24).map((time, i) => ({
       time,
       temp:     Math.round(data.hourly.temperature_2m[i]),
-      humidity: data.hourly.relative_humidity_2m[i],   // ← real humidity
+      humidity: data.hourly.relative_humidity_2m[i],
       code:     data.hourly.weather_code[i],
       precip:   data.hourly.precipitation_probability[i],
       wind:     Math.round(data.hourly.wind_speed_10m[i]),

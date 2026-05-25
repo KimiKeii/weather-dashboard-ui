@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useWeather } from '../../hooks/useWeather'
+import { useWeather } from '../../context/WeatherContext'
 
 const tabs = ['Today', 'Hourly', '7-Day']
 

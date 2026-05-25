@@ -1,3 +1,4 @@
+import { WeatherProvider } from './context/WeatherContext'
 import Navbar from './component/layout/Navbar'
 import Layout from './component/layout/Layout'
 import HeroSection from './component/sections/HeroSection'
@@ -11,18 +12,20 @@ import WeatherIdentity from './component/sections/WeatherIdentity'
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white text-neutral-900 antialiased">
-      <Navbar />
-      <Layout>
-        <HeroSection />
-        <NowSection />
-        <HourlyForecast />
-        <AtmosphereDetails />
-        <HumidityTrend />
-        <SevenDayForecast />
-        <LocationSearch />
-        <WeatherIdentity />
-      </Layout>
-    </div>
+    <WeatherProvider>
+      <div className="min-h-screen bg-white text-neutral-900 antialiased">
+        <Navbar />
+        <Layout>
+          <HeroSection />
+          <NowSection />
+          <HourlyForecast />
+          <AtmosphereDetails />
+          <HumidityTrend />
+          <SevenDayForecast />
+          <LocationSearch />
+          <WeatherIdentity />
+        </Layout>
+      </div>
+    </WeatherProvider>
   )
 }

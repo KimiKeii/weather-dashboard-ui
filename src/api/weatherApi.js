@@ -36,6 +36,7 @@ export async function fetchWeather(lat, lon) {
     ].join(','),
     hourly: [
       'temperature_2m',
+      'relative_humidity_2m',        // ← added
       'weather_code',
       'precipitation_probability',
       'wind_speed_10m',
@@ -47,8 +48,8 @@ export async function fetchWeather(lat, lon) {
       'precipitation_probability_max',
       'uv_index_max',
       'wind_speed_10m_max',
-      'sunrise',      // ← added
-      'sunset',       // ← added
+      'sunrise',
+      'sunset',
     ].join(','),
     timezone: 'auto',
     forecast_days: 7,
@@ -60,14 +61,14 @@ export async function fetchWeather(lat, lon) {
 }
 
 export function interpretWeatherCode(code) {
-  if (code === 0)    return { label: 'Clear sky',     emoji: '☀️' }
-  if (code <= 2)     return { label: 'Partly cloudy', emoji: '⛅' }
-  if (code === 3)    return { label: 'Overcast',      emoji: '☁️' }
-  if (code <= 49)    return { label: 'Foggy',         emoji: '🌫️' }
-  if (code <= 59)    return { label: 'Drizzle',       emoji: '🌦️' }
-  if (code <= 69)    return { label: 'Rain',          emoji: '🌧️' }
-  if (code <= 79)    return { label: 'Snow',          emoji: '❄️' }
-  if (code <= 84)    return { label: 'Rain showers',  emoji: '🌧️' }
-  if (code <= 94)    return { label: 'Thunderstorm',  emoji: '⛈️' }
-  return                    { label: 'Sunny',         emoji: '☀️' }
+  if (code === 0)  return { label: 'Clear sky',     emoji: '☀️' }
+  if (code <= 2)   return { label: 'Partly cloudy', emoji: '⛅' }
+  if (code === 3)  return { label: 'Overcast',      emoji: '☁️' }
+  if (code <= 49)  return { label: 'Foggy',         emoji: '🌫️' }
+  if (code <= 59)  return { label: 'Drizzle',       emoji: '🌦️' }
+  if (code <= 69)  return { label: 'Rain',          emoji: '🌧️' }
+  if (code <= 79)  return { label: 'Snow',          emoji: '❄️' }
+  if (code <= 84)  return { label: 'Rain showers',  emoji: '🌧️' }
+  if (code <= 94)  return { label: 'Thunderstorm',  emoji: '⛈️' }
+  return                  { label: 'Sunny',         emoji: '☀️' }
 }
