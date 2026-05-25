@@ -7,7 +7,6 @@ import HourlyForecast from './component/sections/HourlyForecast'
 import AtmosphereDetails from './component/sections/AtmosphereDetails'
 import HumidityTrend from './component/sections/HumidityTrend'
 import SevenDayForecast from './component/sections/SevenDayForecast'
-import LocationSearch from './component/sections/LocationSearch'
 import WeatherIdentity from './component/sections/WeatherIdentity'
 
 export default function App() {
@@ -22,7 +21,6 @@ export default function App() {
           <AtmosphereDetails />
           <HumidityTrend />
           <SevenDayForecast />
-          <LocationSearch />
           <WeatherIdentity />
         </Layout>
       </div>

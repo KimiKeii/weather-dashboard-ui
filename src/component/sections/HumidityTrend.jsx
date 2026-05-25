@@ -41,7 +41,7 @@ export default function HumidityTrend() {
     : ''
 
   return (
-    <section className="py-8 border-b border-neutral-200">
+    <section id="forecast" className="py-8 border-b border-neutral-200">
       <div className="border border-neutral-200 rounded-2xl p-6">
         <p className="text-sm font-medium text-neutral-900 mb-1">Humidity trend</p>
         <p className="text-xs text-neutral-400 mb-4">Percent</p>

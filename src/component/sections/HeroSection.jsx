@@ -86,7 +86,7 @@ export default function HeroSection() {
   const sunset  = today?.sunset
 
   return (
-    <section className="bg-neutral-700 rounded-2xl my-6 px-10 py-12 flex items-center justify-between gap-10 min-h-[260px]">
+    <section id="hero" className="bg-neutral-700 rounded-2xl my-6 px-10 py-12 flex items-center justify-between gap-10 min-h-[260px]">
 
       {/* ── Left ── */}
       <div className="flex flex-col gap-5 flex-1">

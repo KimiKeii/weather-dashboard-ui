@@ -57,7 +57,7 @@ export default function AtmosphereDetails() {
   ]
 
   return (
-    <section className="py-16 border-b border-neutral-200">
+    <section id="air" className="py-16 border-b border-neutral-200">
       <h2 className="text-3xl font-semibold text-center tracking-tight mb-2">
         Atmosphere details
       </h2>
