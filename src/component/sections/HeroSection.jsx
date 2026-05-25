@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useWeather } from '../../context/WeatherContext'
 
-const tabs = ['Today', 'Hourly', '7-Day']
+const tabs = ['Today']
 
 function bezier(t, p0, p1, p2) {
   const mt = 1 - t

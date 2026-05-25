@@ -12,7 +12,7 @@ const SECTIONS = [
 const NAV_LINKS = [
   { label: 'Forecast', href: '#forecast' },
   { label: 'Air',      href: '#air'      },
-  { label: 'Maps',     href: '#maps'     },
+  { label: 'Statistics', href: '#maps'     },
 ]
 
 export default function Navbar() {
